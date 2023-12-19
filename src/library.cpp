@@ -6,7 +6,7 @@ void hello() {
     std::cout << "Hello, World!" << std::endl;
 }
 
-int main(){
+int main2(){
     std::cout << "Hello, World!" << std::endl;
     return 0;
 }
