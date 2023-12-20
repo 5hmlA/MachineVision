@@ -13,6 +13,8 @@ message(STATUS "XXXXXX ${PROJECT_BINARY_DIR}")
 #把src目录中的所有源文件都储存在var变量中
 aux_source_directory(${CMAKE_CURRENT_SOURCE_DIR}/src SRC_MAIN)
 add_library(${MY_OPENCV} src/opencv_first.cpp)
+
+target_link_directories(${MY_OPENCV} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/OpenCV-MinGW-Build/x64/mingw/bin)
 #add_library(${MY_OPENCV} ${SRC_MAIN})
 #修改库生成所在的路径，生成的库放到lib下
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR}/../lib)

@@ -20,9 +20,10 @@ int main(){
     }
     cout << "Error " << endl;
 
-    std::string path = "ttttt";
+    std::string path = file;
 
     openImgByOpenCV(path);
+//    test();
 //    Mat img = imread(file);
 //    if (img.empty()) {
 //        cout << "Error" << endl;

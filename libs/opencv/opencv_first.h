@@ -9,4 +9,6 @@
 
 void openImgByOpenCV(const std::string &path);
 
+void test();
+
 #endif //MACHINEVISION_OPENCV_FIRST_H

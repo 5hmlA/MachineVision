@@ -2,7 +2,7 @@ cmake_minimum_required(VERSION 3.26)
 project(MachineVision)
 
 set(CMAKE_CXX_STANDARD 17)
-
+set(CMAKE_SKIP_BUILD_RPATH FALSE)
 # param by cmd
 # -Dparam
 if (NOT DEFINED param)
@@ -12,21 +12,32 @@ else ()
     message(STATUS "PARAM, set by cmd ${param}")
 endif ()
 # 指定可执行文件存放目录
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+#SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/bin)
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}/lib)
 
 
 add_subdirectory(libs/opencv)
+
+
+message(STATUS "XXX----XX ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+
+
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
+link_directories(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/OpenCV-MinGW-Build/x64/mingw/bin)
 
 aux_source_directory(./test SRC_TEST)
 # 添加可执行源文件
 add_executable(${PROJECT_NAME} ${SRC_TEST})
 
+target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib)
+target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/OpenCV-MinGW-Build/x64/mingw/bin)
 # project include
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv)
 #引入多个头文件目录
 #include_directories(./src_lib1 ./src_lib2)
-target_link_libraries(${PROJECT_NAME} ${MY_OPENCV})
-target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv/src)
+#target_link_libraries(${PROJECT_NAME} ${MY_OPENCV})
+target_link_libraries(${PROJECT_NAME} libMyOpenCV)
+#target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv/src)
 
 # library
 set(LIB_STATIC ON)
