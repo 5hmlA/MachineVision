@@ -1,17 +1,15 @@
-cmake_minimum_required(VERSION 3.26)
-project(MachineVision)
+project(TestOpenCV)
 
-set(CMAKE_CXX_STANDARD 17)
-set(CMAKE_SKIP_BUILD_RPATH FALSE)
 # param by cmd
 # -Dparam
-#if (NOT DEFINED param)
-#    set(param "PARAM default")
-#    message(STATUS "No PARAM, defaulting")
-#else ()
-#    message(STATUS "PARAM, set by cmd ${param}")
-#endif ()
-
+if (NOT DEFINED param)
+    set(param "PARAM default")
+    message(STATUS "No PARAM, defaulting")
+else ()
+    message(STATUS "PARAM, set by cmd ${param}")
+endif ()
+# 指定可执行文件存放目录
+# 注意：要确保：CMAKE_RUNTIME_OUTPUT_DIRECTORY和EXECUTABLE_OUTPUT_PATH目录保持一致
 #设置整个项目的 动态库输出目录
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/build)
 #设置整个项目的 静态库输出目录
@@ -20,45 +18,46 @@ SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/build)
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/build)
 
 
-#修改库生成所在的路径， 必须要和.exe在同一路径否则无法找到运行库,定义在execute目录
-#set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
+SET(CMAKE_LIBRARY_PATH D:/000/OpenCV-MinGW/x64/mingw/bin ${CMAKE_LIBRARY_PATH})
 
-add_subdirectory(test-ffmpeg)
-#add_subdirectory(test-opencv)
+#
+add_subdirectory(libs/opencv)
+# dependencies\OpenCV-MinGW-Build\x64\mingw\bin  需要此目录绝对路径配置到工作目录，否则运行失败
 
+message(STATUS "CMAKE_CURRENT_SOURCE_DIR---- ${CMAKE_CURRENT_SOURCE_DIR}")
+message(STATUS "EXECUTABLE_OUTPUT_PATH---- ${EXECUTABLE_OUTPUT_PATH}")
+message(STATUS "PROJECT_BINARY_DIR --- ${PROJECT_BINARY_DIR}")
+message(STATUS "CMAKE_RUNTIME_OUTPUT_DIRECTORY --- ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+message(STATUS "CMAKE_LIBRARY_PATH --- ${CMAKE_LIBRARY_PATH}")
+#  EXECUTABLE_OUTPUT_PATH 和 PROJECT_BINARY_DIR 建议保持默认
+#  依赖库编译生成的LIBRARY_OUTPUT_PATH也建议修改为PROJECT_BINARY_DIR
 
-message(STATUS "XXX----XX ${CMAKE_PROGRAM_PATH}")
-
-
-#link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)
-#link_directories(${CMAKE_CURRENT_SOURCE_DIR}/dependencies/OpenCV-MinGW-Build/x64/mingw/bin)
-
-#aux_source_directory(./test SRC_TEST)
+aux_source_directory(. SRC_TEST)
 # 添加可执行源文件
-#add_executable(${PROJECT_NAME} ${SRC_TEST})
+add_executable(${PROJECT_NAME} ${SRC_TEST})
 
-#target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/lib)
-#target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/dependencies/OpenCV-MinGW-Build/x64/mingw/bin)
+#target_link_directories 设置连接路径只对编译有用，运行没用，需要添加到环境变量或者dill文件和exe文件在一个目录
+#target_link_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})
+#target_link_directories(${PROJECT_NAME} PRIVATE D:/000/OpenCV-MinGW/x64/mingw/bin)
 # project include
-#include_directories(${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv)
+target_include_directories(${PROJECT_NAME} PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv)
+
+target_link_libraries(${PROJECT_NAME} PUBLIC MyOpenCV)
 #引入多个头文件目录
 #include_directories(./src_lib1 ./src_lib2)
 
-
-#target_link_libraries(${PROJECT_NAME} ${MY_OPENCV})
-#target_link_libraries(${PROJECT_NAME} MyOpenCV)
 #https://blog.csdn.net/hezhongla0811/article/details/109769789
 #target_link_directories 设置连接路径只对编译有用，运行没用，需要添加到环境变量或者dill文件和exe文件在一个目录
 #target_link_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR}/libs/opencv/src)
 
 # library
-#set(LIB_STATIC ON)
+set(LIB_STATIC ON)
 #set(LIB_STATIC OFF)
-#if (LIB_STATIC)
-#    message(STATUS "library to be STATIC")
-#else ()
-#    message(STATUS "library to be SHARED")
-#endif ()
+if (LIB_STATIC)
+    message(STATUS "library to be STATIC")
+else ()
+    message(STATUS "library to be SHARED")
+endif ()
 
 # depend library
 #message(STATUS "----------------- dependencies -----------------")
