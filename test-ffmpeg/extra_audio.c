@@ -32,16 +32,20 @@ int extra_audio(char *src_media, char *dest_audio) {
 //    2, 从多媒体中找到音频流
     int aud_idx = av_find_best_stream(pFmtCtx, AVMEDIA_TYPE_AUDIO, -1, -1, NULL, 0);
     if (aud_idx < 0) {
-        av_log(&extAudCtx, AV_LOG_ERROR, "av_find_best_stream error %d", aud_idx);
+        av_log(&extAudCtx, AV_LOG_ERROR, "av_find_best_stream error %d\n", aud_idx);
         goto _release;
     }
 //    3, 打开目的文件的上下文
     AVFormatContext *pOFmtCtx = avformat_alloc_context();
     if (!pOFmtCtx) {
-        av_log(&extAudCtx, AV_LOG_ERROR, "No memory");
+        av_log(&extAudCtx, AV_LOG_ERROR, "No memory\n");
         goto _release;
     }
     const AVOutputFormat *pOFormat = av_guess_format(NULL, dest_audio, NULL);
+    if (!pOFormat) {
+        av_log(&extAudCtx, AV_LOG_ERROR, "av_guess_format return NULL\n");
+        goto _release;
+    }
     pOFmtCtx->oformat = pOFormat;
 //    4，为目的文件创建一个新的音频流
     AVStream *pOStream = avformat_new_stream(pOFmtCtx, NULL);

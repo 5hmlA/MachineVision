@@ -8,6 +8,6 @@ int main(int argc, char* argv[]) {
     char *video = "C:\\Users\\xuchuqi\\CLionProjects\\MachineVision\\test_video.mp4";
     // 使用printf输出字符串
     printf("%s\n", video);
-    extra_audio(video,"1.acc");
+    extra_audio(video,"C:\\Users\\xuchuqi\\CLionProjects\\MachineVision\\1.acc");
     return 0;
 }
