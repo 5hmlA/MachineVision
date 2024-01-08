@@ -12,22 +12,19 @@ set(CMAKE_SKIP_BUILD_RPATH FALSE)
 #    message(STATUS "PARAM, set by cmd ${param}")
 #endif ()
 
-#设置整个项目的 动态库输出目录
+#设置整个项目的 动态库输出目录, 建议定义在exe项目的CMakeLists中,library项目中的CMakeLists中不要修改
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/build)
-#设置整个项目的 静态库输出目录
+#设置整个项目的 静态库输出目录, 建议定义在exe项目的CMakeLists中,library项目中的CMakeLists中不要修改
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/build)
-#设置整个项目的 可执行文件输出目录
+#设置整个项目的 可执行文件输出目录, 建议定义在exe项目的CMakeLists中,library项目中的CMakeLists中不要修改
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/build)
 
-
-#修改库生成所在的路径， 必须要和.exe在同一路径否则无法找到运行库,定义在execute目录
+#修改库library生成.dill或者.a所在的路径， 必须要和.exe在同一路径否则无法找到运行库, 建议定义在exe项目中
 #set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 
 add_subdirectory(test-ffmpeg)
 #add_subdirectory(test-opencv)
 
-
-message(STATUS "XXX----XX ${CMAKE_PROGRAM_PATH}")
 
 
 #link_directories(${CMAKE_CURRENT_SOURCE_DIR}/lib)

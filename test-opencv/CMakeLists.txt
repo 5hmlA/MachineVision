@@ -10,17 +10,17 @@ else ()
 endif ()
 # 指定可执行文件存放目录
 # 注意：要确保：CMAKE_RUNTIME_OUTPUT_DIRECTORY和EXECUTABLE_OUTPUT_PATH目录保持一致
-#设置整个项目的 动态库输出目录
+#设置整个项目的 动态库输出目录, 建议定义在exe项目的CMakeLists中,library项目中的CMakeLists中不要修改
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/build)
-#设置整个项目的 静态库输出目录
+#设置整个项目的 静态库输出目录, 建议定义在exe项目的CMakeLists中,library项目中的CMakeLists中不要修改
 SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/build)
-#设置整个项目的 可执行文件输出目录
+#设置整个项目的 可执行文件输出目录, 建议定义在exe项目的CMakeLists中,library项目中的CMakeLists中不要修改
 SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/build)
 
+#修改库library生成.dill或者.a所在的路径， 必须要和.exe在同一路径否则无法找到运行库, 建议定义在exe项目中
+#set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 
-SET(CMAKE_LIBRARY_PATH D:/000/OpenCV-MinGW/x64/mingw/bin ${CMAKE_LIBRARY_PATH})
 
-#
 add_subdirectory(libs/opencv)
 # dependencies\OpenCV-MinGW-Build\x64\mingw\bin  需要此目录绝对路径配置到工作目录，否则运行失败
 
@@ -29,8 +29,6 @@ message(STATUS "EXECUTABLE_OUTPUT_PATH---- ${EXECUTABLE_OUTPUT_PATH}")
 message(STATUS "PROJECT_BINARY_DIR --- ${PROJECT_BINARY_DIR}")
 message(STATUS "CMAKE_RUNTIME_OUTPUT_DIRECTORY --- ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 message(STATUS "CMAKE_LIBRARY_PATH --- ${CMAKE_LIBRARY_PATH}")
-#  EXECUTABLE_OUTPUT_PATH 和 PROJECT_BINARY_DIR 建议保持默认
-#  依赖库编译生成的LIBRARY_OUTPUT_PATH也建议修改为PROJECT_BINARY_DIR
 
 aux_source_directory(. SRC_TEST)
 # 添加可执行源文件
