@@ -20,8 +20,9 @@ message(STATUS ${FFMPEG_DIR})
 message(STATUS ${CMAKE_SOURCE_DIR})
 
 target_include_directories(${PROJECT_NAME} PUBLIC ${FFMPEG_DIR}/include)
+# 动态库文件必须添加到运行时的path路径
 # 设置连接路径只对编译有用，运行没用，需要添加到环境变量或者dill文件和exe文件在一个目录，或者把动态库所在目录配置到工作目录，或者环境变量
-target_link_directories(${PROJECT_NAME} PUBLIC ${FFMPEG_DIR}/lib ${FFMPEG_DIR}/bin)
+target_link_directories(${PROJECT_NAME} PUBLIC ${FFMPEG_DIR}/lib)
 #多个库必须换行
 target_link_libraries(${PROJECT_NAME} PUBLIC avcodec
         avdevice

@@ -2,7 +2,5 @@
 #define MACHINEVISION_EXTRA_AUDIO_H
 
 
-int main_audio(int argc, char *argv[]);
-
-int extra_audio(char *src_media, char *dest_audio);
+int convert_video(char *src_media, char *dest_video);
 #endif //MACHINEVISION_EXTRA_AUDIO_H
