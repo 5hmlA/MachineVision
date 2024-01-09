@@ -22,6 +22,13 @@ void log_duration(int64_t duration_sec) {
     av_log(&covtCtx, AV_LOG_VERBOSE, "media total time: %d:%d:%d \n", hour, minute, sec);
 }
 
+// 1 avformat_open_input 打开输入流并读取标头。填充到pFmtCtx数据中，编解码器未打开
+// 2 avformat_alloc_output_context2 为指定输出文件格式分配 AVFormatContext，会自动根据文件格式生成对应的AVOutputFormat
+// 3 pOFmtCtx->pb 关联到具体文件
+// 4 遍历所有流，记录需要的流的index,并把对应输入文件的各个流的codepar复制到对应的pOFmtCtx输出上下文总的各个流的codecpar数据
+// 5 写入信息头, 必须在更新pOFmtCtx的所有AVStream的codecpar之后才可以执行，否则执行失败
+// 6 复制音/视/字幕流  av_read_frame()>=0,av_packet_rescale_ts,av_interleaved_write_frame,av_packet_unref
+// 7 av_write_trailer 将流预告片写入输出媒体文件
 int convert_video(char *src_media, char *dest_video) {
     covtCtx.av_class = &ConvertContext;
     av_log_set_level(AV_LOG_DEBUG);
