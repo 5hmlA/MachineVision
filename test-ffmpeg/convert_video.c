@@ -14,7 +14,7 @@ struct {
     const AVClass *av_class;
 } covtCtx;
 
-void log_duration(int64_t duration_sec){
+void log_duration(int64_t duration_sec) {
     int hour, minute, sec;
     hour = duration_sec / 3600;
     minute = duration_sec % 3600 / 60;
@@ -53,6 +53,14 @@ int convert_video(char *src_media, char *dest_video) {
     minute = duration_sec % 3600 / 60;
     sec = duration_sec % 60;
     av_log(&covtCtx, AV_LOG_VERBOSE, "media total time: %d:%d:%d \n", hour, minute, sec);
+
+    // 1 avformat_open_input 打开输入流并读取标头。填充到pFmtCtx数据中，编解码器未打开
+    // 2 avformat_alloc_output_context2 为指定输出文件格式分配 AVFormatContext，会自动根据文件格式生成对应的AVOutputFormat
+    // 3 pOFmtCtx->pb 关联到具体文件
+    // 4 遍历所有流，记录需要的流的index,并把对应输入文件的各个流的codepar复制到对应的pOFmtCtx输出上下文总的各个流的codecpar数据
+    // 5 写入信息头, 必须在更新pOFmtCtx的所有AVStream的codecpar之后才可以执行，否则执行失败
+    // 6 复制音/视/字幕流  av_read_frame()>=0,av_packet_rescale_ts,av_interleaved_write_frame,av_packet_unref
+    // 7 av_write_trailer 将流预告片写入输出媒体文件
 
     if ((rest = avformat_alloc_output_context2(&pOFmtCtx, NULL, NULL, dest_video)) < 0) {
         av_log(&covtCtx, AV_LOG_ERROR, "avformat_alloc_output_context2 error: %s\n", av_err2str(rest));
@@ -95,7 +103,7 @@ int convert_video(char *src_media, char *dest_video) {
         strm_map[i] = cut_indx++;
     }
 
-    //写入信息头
+    //写入信息头, 必须在更新pOFmtCtx的所有AVStream的codecpar之后才可以执行，否则执行失败
     if ((rest = avformat_write_header(pOFmtCtx, NULL)) < 0) {
         av_log(&covtCtx, AV_LOG_ERROR, "avformat_write_header error: %s\n", av_err2str(rest));
         goto _release;
@@ -103,7 +111,7 @@ int convert_video(char *src_media, char *dest_video) {
 
     //复制音/视/字幕流
     AVPacket pkt_box;
-    while (av_read_frame(pFmtCtx, &pkt_box)>=0) {
+    while (av_read_frame(pFmtCtx, &pkt_box) >= 0) {
         //具体某个流复制
         //读取出所有流的帧数据
         int i_strm_indx = pkt_box.stream_index;
@@ -116,10 +124,12 @@ int convert_video(char *src_media, char *dest_video) {
         pkt_box.stream_index = o_strm_indx;
         av_packet_rescale_ts(&pkt_box, pFmtCtx->streams[i_strm_indx]->time_base, pOFmtCtx->streams[o_strm_indx]->time_base);
         pkt_box.pos = 0;
+        //将数据包写入输出媒体文件，确保正确交错
         av_interleaved_write_frame(pOFmtCtx, &pkt_box);
         av_packet_unref(&pkt_box);
     }
 
+    //将流预告片写入输出媒体文件
     av_write_trailer(pOFmtCtx);
 
     _release:
