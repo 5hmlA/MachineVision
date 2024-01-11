@@ -1,7 +1,9 @@
 #include <stdio.h>
+#include <time.h>
 #include "extra_audio.h"
 #include "extra_video.h"
 #include "convert_video.h"
+#include "wings.h"
 
 int extra_video(char *src_media, char *dest_video);
 
@@ -14,6 +16,6 @@ int main(int argc, char* argv[]) {
     printf("%s\n", video);
 //    extra_audio(video,"1.aac");
 //    extra_video(video,"1.h264");
-    convert_video(video,"1.mov");
+//    convert_video(video,"1.mov");
     return 0;
 }
