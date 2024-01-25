@@ -1,6 +1,21 @@
 message(STATUS "============================ config opencv for ${OPENCV_WHO} ${PROJECT_NAME}============================")
+
 # OpenCV
-set(OpenCV_DIR ${CMAKE_SOURCE_DIR}/dependencies/OpenCV-MinGW-Build)
+if (WIN32)
+    set(OpenCV_DIR ${CMAKE_SOURCE_DIR}/dependencies/OpenCV-MinGW-Build)
+elseif (APPLE)
+#    安装 opencv
+#    brew install opencv
+#    查看 opencv 的安装路径
+#    brew info opencv
+    set(OpenCV_DIR "/usr/local/Cellar/opencv/4.9.0_1")
+elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
+#    安装 opencv
+#    sudo apt install opencv
+#    查看 opencv 的安装路径
+#    which opencv
+    message(STATUS "linux")
+endif ()
 
 find_package(OpenCV REQUIRED)
 

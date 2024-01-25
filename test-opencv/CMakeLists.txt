@@ -11,11 +11,11 @@ endif ()
 # 指定可执行文件存放目录
 # 注意：要确保：CMAKE_RUNTIME_OUTPUT_DIRECTORY和EXECUTABLE_OUTPUT_PATH目录保持一致
 #设置整个项目的 动态库输出目录, 建议定义在exe项目的CMakeLists中,library项目中的CMakeLists中不要修改
-SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/build)
+SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 #设置整个项目的 静态库输出目录, 建议定义在exe项目的CMakeLists中,library项目中的CMakeLists中不要修改
-SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/build)
+SET(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${PROJECT_SOURCE_DIR}/build)
 #设置整个项目的 可执行文件输出目录, 建议定义在exe项目的CMakeLists中,library项目中的CMakeLists中不要修改
-SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/build)
+SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_SOURCE_DIR}/build)
 
 #修改库library生成.dill或者.a所在的路径， 必须要和.exe在同一路径否则无法找到运行库, 建议定义在exe项目中
 #set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
@@ -30,9 +30,15 @@ message(STATUS "PROJECT_BINARY_DIR --- ${PROJECT_BINARY_DIR}")
 message(STATUS "CMAKE_RUNTIME_OUTPUT_DIRECTORY --- ${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
 message(STATUS "CMAKE_LIBRARY_PATH --- ${CMAKE_LIBRARY_PATH}")
 
+
 aux_source_directory(. SRC_TEST)
 # 添加可执行源文件
 add_executable(${PROJECT_NAME} ${SRC_TEST})
+# 设置常量
+#add_definitions(-DMY_CONSTANT=42)
+## 或者，使用target_compile_definitions
+## target_compile_definitions(your_target_name PRIVATE MY_CONSTANT=42)
+target_compile_definitions(${PROJECT_NAME} PRIVATE TEST_IMG="${CMAKE_CURRENT_SOURCE_DIR}/img.png")
 
 #target_link_directories 设置连接路径只对编译有用，运行没用，需要添加到环境变量或者dill文件和exe文件在一个目录
 #target_link_directories(${PROJECT_NAME} PRIVATE ${PROJECT_BINARY_DIR})

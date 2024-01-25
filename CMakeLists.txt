@@ -12,6 +12,11 @@ set(CMAKE_SKIP_BUILD_RPATH FALSE)
 #    message(STATUS "PARAM, set by cmd ${param}")
 #endif ()
 
+# 设置全局常量 MY_CONSTANT=42
+#add_definitions(-DMY_CONSTANT=42)
+add_definitions(-DMY_TEST_VIDEO="${CMAKE_SOURCE_DIR}/test-ffmpeg/chutian.mp4")
+
+# 建议下面的目录设置到 ${PROJECT_SOURCE_DIR}/build 生成的文件设置到CMakeList文件的同级目录的build目录里，方便查看
 #设置整个项目的 动态库输出目录, 建议定义在exe项目的CMakeLists中,library项目中的CMakeLists中不要修改
 SET(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${PROJECT_BINARY_DIR}/build)
 #设置整个项目的 静态库输出目录, 建议定义在exe项目的CMakeLists中,library项目中的CMakeLists中不要修改
@@ -22,8 +27,21 @@ SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/build)
 #修改库library生成.dill或者.a所在的路径， 必须要和.exe在同一路径否则无法找到运行库, 建议定义在exe项目中
 #set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 
-add_subdirectory(test-ffmpeg)
-#add_subdirectory(test-opencv)
+# project variables
+MESSAGE(STATUS "platform: ${CMAKE_SYSTEM_NAME}")
+if (UNIX AND NOT APPLE)
+    MESSAGE(STATUS "unix")
+elseif (WIN32)
+    MESSAGE(STATUS "windows")
+elseif (APPLE)
+    MESSAGE(STATUS "mac os")
+else ()
+    MESSAGE(STATUS "other platform")
+endif ()
+message(STATUS "system name: ${CMAKE_SYSTEM_NAME}")
+
+#add_subdirectory(test-ffmpeg)
+add_subdirectory(test-opencv)
 
 
 
