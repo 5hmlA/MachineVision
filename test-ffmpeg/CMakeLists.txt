@@ -27,6 +27,7 @@ elseif (APPLE)
     set(FFMPEG_DIR "/usr/local/Cellar/ffmpeg/6.1.1_2")
 elseif (CMAKE_SYSTEM_NAME MATCHES "Linux")
     message(STATUS "linux")
+    find_package(FFmpeg COMPONENTS AVCODEC AVFORMAT AVUTIL SWSCALE REQUIRED)
 endif ()
 
 message(STATUS ${FFMPEG_DIR})

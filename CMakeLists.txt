@@ -30,7 +30,7 @@ SET(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR}/build)
 # project variables
 MESSAGE(STATUS "platform: ${CMAKE_SYSTEM_NAME}")
 if (UNIX AND NOT APPLE)
-    MESSAGE(STATUS "unix")
+    MESSAGE(STATUS "Linux")
 elseif (WIN32)
     MESSAGE(STATUS "windows")
 elseif (APPLE)
@@ -40,8 +40,8 @@ else ()
 endif ()
 message(STATUS "system name: ${CMAKE_SYSTEM_NAME}")
 
-#add_subdirectory(test-ffmpeg)
-add_subdirectory(test-opencv)
+add_subdirectory(test-ffmpeg)
+#add_subdirectory(test-opencv)
 
 
 
